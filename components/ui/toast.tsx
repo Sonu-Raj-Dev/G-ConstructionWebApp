@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import type * as React from "react"
 import { forwardRef, useState, useEffect, useRef } from "react"

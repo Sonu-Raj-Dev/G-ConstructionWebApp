@@ -1,5 +1,4 @@
-"use client"
-
+"use client";
 import type { IProject } from "@/models/Project"
 import type { IEmployee } from "@/models/Employee"
 
