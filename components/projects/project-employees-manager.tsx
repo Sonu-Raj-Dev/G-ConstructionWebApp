@@ -13,7 +13,8 @@ import { useToast } from "@/hooks/use-toast"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { PlusCircle } from "lucide-react"
-import { removeEmployeeFromProject,employeeProjectMapping } from "@/app/actions/employee-actions"
+import { removeEmployeeFromProject, employeeProjectMapping } from "@/app/actions/employee-actions"
+import { Loader } from "@/components/ui/loader"
 
 interface ProjectEmployeesManagerProps {
   project: IProject
@@ -36,12 +37,12 @@ export function ProjectEmployeesManager({ project, employees }: ProjectEmployees
 
   async function handleAssignEmployee() {
     if (!selectedEmployee) return
-  
+
     setIsLoading(true)
-  
+
     try {
       const response = await employeeProjectMapping(selectedEmployee, project._id)
-  
+
       if (response.success) {
         toast({
           title: "Employee assigned",
@@ -67,11 +68,10 @@ export function ProjectEmployeesManager({ project, employees }: ProjectEmployees
       setSelectedEmployee("")
     }
   }
-  
 
   async function handleRemoveEmployee(employeeId: string) {
     setIsLoading(true)
-    debugger;
+
     try {
       const result = await removeEmployeeFromProject(employeeId)
 
@@ -161,8 +161,17 @@ export function ProjectEmployeesManager({ project, employees }: ProjectEmployees
               </Select>
             </div>
             <Button onClick={handleAssignEmployee} disabled={isLoading || !selectedEmployee} className="sm:self-end">
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Assign Employee
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <Loader size="sm" />
+                  <span>Assigning...</span>
+                </div>
+              ) : (
+                <>
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Assign Employee
+                </>
+              )}
             </Button>
           </div>
         </CardContent>
@@ -191,7 +200,7 @@ export function ProjectEmployeesManager({ project, employees }: ProjectEmployees
                   <TableRow key={employee._id}>
                     <TableCell className="font-medium">{employee.employeeId}</TableCell>
                     <TableCell>{employee.name}</TableCell>
-                    <TableCell>{employee.phone}</TableCell>
+                    <TableCell>{employee.phone || "-"}</TableCell>
                     <TableCell>₹{employee.dailyWage}</TableCell>
                     <TableCell>
                       <Badge
@@ -213,7 +222,7 @@ export function ProjectEmployeesManager({ project, employees }: ProjectEmployees
                         onClick={() => handleRemoveEmployee(employee._id)}
                         disabled={isLoading}
                       >
-                        Remove
+                        {isLoading ? <Loader size="sm" /> : "Remove"}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -228,5 +237,3 @@ export function ProjectEmployeesManager({ project, employees }: ProjectEmployees
     </div>
   )
 }
-
-

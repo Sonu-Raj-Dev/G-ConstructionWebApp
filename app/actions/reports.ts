@@ -27,7 +27,7 @@ export async function getEmployeeReports() {
           employee: employee._id,
           date: { $gte: startOfMonth, $lte: endOfMonth },
         })
-
+        console.log("attendanceRecords", attendanceRecords);
         // Count days present, absent, and half days
         const daysPresent = attendanceRecords.filter((record) => record.status === "Present").length
         const daysAbsent = attendanceRecords.filter((record) => record.status === "Absent").length
@@ -42,11 +42,13 @@ export async function getEmployeeReports() {
 
         // Calculate total payments
         const totalPayments = payments.reduce((sum, payment) => sum + payment.amount, 0)
-
+        console.log("totalPayments", totalPayments);
         // Calculate average daily rate
+        debugger;
         const workDays = daysPresent + halfDays / 2
-        const avgDailyRate = workDays > 0 ? Math.round(totalPayments / workDays) : employee.dailyWage
-
+        console.log("workDays", workDays);
+        const avgDailyRate =  employee.dailyWage
+        console.log("avgDailyRate", avgDailyRate);
         return {
           employee: JSON.parse(JSON.stringify(employee)),
           project: employee.currentProject ? JSON.parse(JSON.stringify(employee.currentProject)) : null,

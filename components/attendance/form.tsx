@@ -17,11 +17,13 @@ import { markAttendance } from "@/app/actions/attendance"
 import { getProjects } from "@/app/actions/projects"
 import { getEmployees } from "@/app/actions/employees"
 import { useToast } from "@/hooks/use-toast"
+import { Loader } from "@/components/ui/loader"
 
 export function AttendanceForm() {
   const [paymentGiven, setPaymentGiven] = useState(false)
   const [status, setStatus] = useState("Present")
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingData, setIsLoadingData] = useState(true)
   const [projects, setProjects] = useState<IProject[]>([])
   const [employees, setEmployees] = useState<IEmployee[]>([])
   const [selectedProject, setSelectedProject] = useState("")
@@ -33,21 +35,30 @@ export function AttendanceForm() {
   // Fetch projects and employees when component mounts
   useEffect(() => {
     async function fetchData() {
-      const projectsResult = await getProjects()
-      const employeesResult = await getEmployees()
+      setIsLoadingData(true)
+      try {
+        const projectsResult = await getProjects()
+        const employeesResult = await getEmployees()
 
-      if (projectsResult.success) {
-        setProjects(projectsResult.projects)
-      }
+        if (projectsResult.success) {
+          setProjects(projectsResult.projects)
+        }
 
-      if (employeesResult.success) {
-        setEmployees(employeesResult.employees)
-      }
+        if (employeesResult.success) {
+          setEmployees(employeesResult.employees)
+        }
 
-      // Check if employeeId is provided in the URL
-      const employeeId = searchParams.get("employeeId")
-      if (employeeId) {
-        setSelectedEmployee(employeeId)
+        // Check if employeeId is provided in the URL
+        if (searchParams) {
+          const employeeId = searchParams.get("employeeId")
+          if (employeeId) {
+            setSelectedEmployee(employeeId)
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error)
+      } finally {
+        setIsLoadingData(false)
       }
     }
 
@@ -100,6 +111,22 @@ export function AttendanceForm() {
   const filteredEmployees = selectedProject
     ? employees.filter((employee) => employee.currentProject && employee.currentProject._id === selectedProject)
     : employees
+
+  if (isLoadingData) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Mark Attendance</CardTitle>
+          <CardDescription>Select an employee and mark their attendance for today</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex justify-center py-8">
+            <Loader text="Loading data..." />
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
     <Card>
@@ -198,7 +225,14 @@ export function AttendanceForm() {
           )}
 
           <Button type="submit" className="w-full md:w-auto" disabled={isLoading}>
-            {isLoading ? "Processing..." : "Mark Attendance"}
+            {isLoading ? (
+              <div className="flex items-center gap-2">
+                <Loader size="sm" />
+                <span>Marking attendance...</span>
+              </div>
+            ) : (
+              "Mark Attendance"
+            )}
           </Button>
         </form>
       </CardContent>

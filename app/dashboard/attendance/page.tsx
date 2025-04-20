@@ -1,4 +1,3 @@
-
 import { AttendanceHeader } from "@/components/attendance/header"
 import { AttendanceForm } from "@/components/attendance/form"
 import { AttendanceList } from "@/components/attendance/list"

@@ -58,8 +58,8 @@ export async function EmployeesList() {
               <TableRow key={employee._id}>
                 <TableCell className="font-medium">{employee.employeeId}</TableCell>
                 <TableCell>{employee.name}</TableCell>
-                <TableCell>{employee.phone}</TableCell>
-                <TableCell>{employee.aadhar}</TableCell>
+                <TableCell>{employee.phone || "-"}</TableCell>
+                <TableCell>{employee.aadhar || "-"}</TableCell>
                 <TableCell>{employee.currentProject ? employee.currentProject.siteName : "Not Assigned"}</TableCell>
                 <TableCell>₹{employee.dailyWage}</TableCell>
                 <TableCell>

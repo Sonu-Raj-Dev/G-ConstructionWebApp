@@ -3,8 +3,8 @@ import mongoose, { Schema, type Document } from "mongoose"
 export interface IEmployee extends Document {
   employeeId: string
   name: string
-  aadhar: string
-  phone: string
+  aadhar?: string
+  phone?: string
   dailyWage: number
   status: "Active" | "Inactive" | "On Leave"
   currentProject: mongoose.Types.ObjectId | null
@@ -16,8 +16,8 @@ const EmployeeSchema: Schema = new Schema(
   {
     employeeId: { type: String, required: true, unique: true },
     name: { type: String, required: true },
-    aadhar: { type: String, required: true, unique: true },
-    phone: { type: String, required: true },
+    aadhar: { type: String, required: false },
+    phone: { type: String, required: false },
     dailyWage: { type: Number, required: true },
     status: {
       type: String,

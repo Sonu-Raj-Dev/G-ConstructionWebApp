@@ -5,7 +5,7 @@ export interface IProject extends Document {
   siteName: string
   siteAddress: string
   clientName: string
-  clientContact: string
+  clientContact?: string
   totalPaymentAgreed: number
   paymentReceived: number
   startDate: Date | null
@@ -21,7 +21,7 @@ const ProjectSchema: Schema = new Schema(
     siteName: { type: String, required: true },
     siteAddress: { type: String, required: true },
     clientName: { type: String, required: true },
-    clientContact: { type: String, required: true },
+    clientContact: { type: String, required: false },
     totalPaymentAgreed: { type: Number, required: true },
     paymentReceived: { type: Number, default: 0 },
     startDate: { type: Date, default: null },

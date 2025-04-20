@@ -17,9 +17,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useToast } from "@/hooks/use-toast"
+import { Loader } from "@/components/ui/loader"
 
 export function PaymentForm() {
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingData, setIsLoadingData] = useState(true)
   const [paymentType, setPaymentType] = useState("Received")
   const [selectedProject, setSelectedProject] = useState("")
   const [selectedEmployee, setSelectedEmployee] = useState("")
@@ -32,21 +34,30 @@ export function PaymentForm() {
   // Fetch projects and employees when component mounts
   useEffect(() => {
     async function fetchData() {
-      const projectsResult = await getProjects()
-      const employeesResult = await getEmployees()
+      setIsLoadingData(true)
+      try {
+        const projectsResult = await getProjects()
+        const employeesResult = await getEmployees()
 
-      if (projectsResult.success) {
-        setProjects(projectsResult.projects)
-      }
+        if (projectsResult.success) {
+          setProjects(projectsResult.projects)
+        }
 
-      if (employeesResult.success) {
-        setEmployees(employeesResult.employees)
-      }
+        if (employeesResult.success) {
+          setEmployees(employeesResult.employees)
+        }
 
-      // Check if projectId is provided in the URL
-      const projectId = searchParams.get("projectId")
-      if (projectId) {
-        setSelectedProject(projectId)
+        // Check if projectId is provided in the URL
+        if (searchParams) {
+          const projectId = searchParams.get("projectId")
+          if (projectId) {
+            setSelectedProject(projectId)
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error)
+      } finally {
+        setIsLoadingData(false)
       }
     }
 
@@ -92,6 +103,22 @@ export function PaymentForm() {
     paymentType === "Paid" && selectedProject
       ? employees.filter((employee) => employee.currentProject && employee.currentProject._id === selectedProject)
       : employees
+
+  if (isLoadingData) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Record Payment</CardTitle>
+          <CardDescription>Enter the details for the payment transaction</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex justify-center py-8">
+            <Loader text="Loading data..." />
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
     <Card>
@@ -208,7 +235,14 @@ export function PaymentForm() {
             Cancel
           </Button>
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Processing..." : "Record Payment"}
+            {isLoading ? (
+              <div className="flex items-center gap-2">
+                <Loader size="sm" />
+                <span>Processing...</span>
+              </div>
+            ) : (
+              "Record Payment"
+            )}
           </Button>
         </CardFooter>
       </form>

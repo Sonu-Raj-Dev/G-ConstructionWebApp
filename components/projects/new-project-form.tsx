@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
+import { Loader } from "@/components/ui/loader"
 
 export function NewProjectForm() {
   const [isLoading, setIsLoading] = useState(false)
@@ -75,8 +76,8 @@ export function NewProjectForm() {
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="clientContact">Client Contact</Label>
-              <Input id="clientContact" name="clientContact" placeholder="Enter client phone/email" required />
+              <Label htmlFor="clientContact">Client Contact (Optional)</Label>
+              <Input id="clientContact" name="clientContact" placeholder="Enter client phone/email" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="totalPaymentAgreed">Total Payment Agreed (₹)</Label>
@@ -108,7 +109,14 @@ export function NewProjectForm() {
             Cancel
           </Button>
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Creating..." : "Create Project"}
+            {isLoading ? (
+              <div className="flex items-center gap-2">
+                <Loader size="sm" />
+                <span>Creating...</span>
+              </div>
+            ) : (
+              "Create Project"
+            )}
           </Button>
         </CardFooter>
       </form>

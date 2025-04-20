@@ -31,7 +31,7 @@ const sidebarItems = [
   },
   {
     title: "Payments",
-    href: "/dashboard/payments/new",
+    href: "/dashboard/payments",
     icon: IndianRupee,
   },
   {
@@ -49,7 +49,7 @@ export function DashboardSidebar() {
     <>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="md:hidden">
+          <Button variant="outline" size="icon" className="fixed left-4 top-20 z-40 md:hidden">
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle Menu</span>
           </Button>
@@ -79,7 +79,9 @@ export function DashboardSidebar() {
                 onClick={() => setOpen(false)}
                 className={cn(
                   "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                  pathname === item.href ? "bg-accent text-accent-foreground" : "transparent",
+                  pathname === item.href || pathname.startsWith(`${item.href}/`)
+                    ? "bg-accent text-accent-foreground"
+                    : "transparent",
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -91,12 +93,12 @@ export function DashboardSidebar() {
       </Sheet>
       <div className="hidden border-r bg-background md:block md:w-64">
         <div className="flex h-full flex-col">
-          <div className="border-b p-4">
+          {/* <div className="border-b p-4">
             <Link href="/dashboard" className="flex items-center gap-2 font-bold text-xl">
               <ClipboardList className="h-6 w-6" />
               <span>G-Construction</span>
             </Link>
-          </div>
+          </div> */}
           <nav className="flex flex-col gap-1 p-4">
             {sidebarItems.map((item) => (
               <Link
@@ -104,7 +106,9 @@ export function DashboardSidebar() {
                 href={item.href}
                 className={cn(
                   "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                  pathname === item.href ? "bg-accent text-accent-foreground" : "transparent",
+                  pathname === item.href || pathname.startsWith(`${item.href}/`)
+                    ? "bg-accent text-accent-foreground"
+                    : "transparent",
                 )}
               >
                 <item.icon className="h-5 w-5" />
