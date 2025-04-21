@@ -1,11 +1,10 @@
-import Link from 'next/link'
- 
-export default function NotFound() {
-  return (
-    <div>
-      <h2>Not Found</h2>
-      <p>Could not find requested resource</p>
-      <Link href="/">Return Home</Link>
-    </div>
-  )
+"use client"
+
+import { useSearchParams } from "next/navigation"
+
+export default function NotFoundClient() {
+  const params = useSearchParams()
+  const query = params?.get("q") ?? ""
+
+  return <p>Couldn't find anything for: <strong>{query}</strong></p>
 }

@@ -1,15 +1,15 @@
 // app/not-found.tsx or app/_not-found/page.tsx
 
-import { Suspense } from 'react';
-import SearchParamClient from './not-found-page';
+import { Suspense } from "react"
+import NotFoundClient from "./not-found-page"
 
-export default function NotFound() {
+export default function NotFoundPage() {
   return (
-    <div>
-      <h1>Page Not Found</h1>
+    <div className="p-4">
+      <h1 className="text-xl font-bold">Page Not Found</h1>
       <Suspense fallback={<div>Loading...</div>}>
-        <SearchParamClient />
+        <NotFoundClient />
       </Suspense>
     </div>
-  );
+  )
 }

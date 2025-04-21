@@ -69,7 +69,7 @@ export async function loginUser(formData: FormData) {
 
     // Set session cookie
     const sessionId = crypto.randomUUID()
-    cookies().set("session", sessionId, {
+    ;(await cookies()).set("session", sessionId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24 * 7, // 1 week

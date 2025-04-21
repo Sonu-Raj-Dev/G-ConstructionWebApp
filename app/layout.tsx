@@ -1,18 +1,7 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
+import { Suspense } from "react"
+import GlobalLoading from "./global-loading" // already a client component
+import { ThemeProvider } from "next-themes"
 import { Toast } from "@/components/ui/toast"
-import { GlobalLoading } from "./global-loading"
-
-const inter = Inter({ subsets: ["latin"] })
-
-export const metadata: Metadata = {
-  title: "G-Construction Management System",
-  description: "A web-based civil contractor management system",
-  generator: "v0.dev",
-}
 
 export default function RootLayout({
   children,
@@ -21,9 +10,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <GlobalLoading />
+          <Suspense fallback={null}>
+            <GlobalLoading />
+          </Suspense>
           {children}
           <Toast id={""} />
         </ThemeProvider>
