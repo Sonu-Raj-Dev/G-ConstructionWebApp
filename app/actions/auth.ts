@@ -99,23 +99,25 @@ export async function loginUser(formData: FormData) {
   }
 }
 
-// Logout user
 export async function logoutUser() {
-  cookies().delete("session")
-  cookies().delete("user")
-  redirect("/login")
+  const cookieStore = await cookies();
+  cookieStore.delete("session");
+  cookieStore.delete("user");
+  redirect("/login");
 }
 
-// Check if user is authenticated
+
 export async function getUser() {
-  const userCookie = cookies().get("user")
+  const cookieStore = await cookies(); // Await the cookies() call
+  const userCookie = cookieStore.get("user");
+
   if (!userCookie) {
-    return null
+    return null;
   }
 
   try {
-    return JSON.parse(userCookie.value)
+    return JSON.parse(userCookie.value);
   } catch {
-    return null
+    return null;
   }
 }
