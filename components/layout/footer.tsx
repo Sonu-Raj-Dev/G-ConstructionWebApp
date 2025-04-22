@@ -5,9 +5,9 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="border-t bg-background">
-      <div className="container py-8 md:py-12">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+    <footer >
+      {/* <div className="container py-8 md:py-12"> */}
+        {/* <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 font-bold text-xl">
               <ClipboardList className="h-6 w-6" />
@@ -71,11 +71,12 @@ export function Footer() {
               <li className="text-muted-foreground">Address:Malad East, India</li>
             </ul>
           </div>
-        </div>
-        <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
+        </div> */}
+        
+      {/* </div> */}
+      <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
           <p>&copy; {currentYear} G-Construction. All rights reserved.</p>
         </div>
-      </div>
     </footer>
   )
 }
